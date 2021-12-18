@@ -1,0 +1,40 @@
+.text-center {
+    text-align: center;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.data-table, .data-table td, .data-table th {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.data-table th, .data-table td {
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+}
+
+.data-table th {
+    font-size: 1.4em;
+}
+
+.data-table td {
+    font-size: 1.2em;
+}
+
+.form-table {
+    empty-cells: show;
+}
+
+.float-right {
+    float: right;
+}
+
+.form-table label, .form-table button, .form-table input {
+    font-size: 16px;
+}
