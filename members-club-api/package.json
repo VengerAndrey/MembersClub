@@ -3,15 +3,18 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "ts-node-dev --no-notify --transpile-only --respawn ./src",
-    "start": "node ./dist/src"
+    "start": "ts-node --transpile-only src/graphql/schema && tsc && node ./dist"
   },
   "dependencies": {
     "apollo-server": "^3.5.0",
     "graphql": "^15.8.0",
-    "nexus": "^1.1.0"
+    "neverthrow": "^4.3.1",
+    "nexus": "^1.1.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/node": "^17.0.0",
+    "@types/uuid": "^8.3.3",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.5.4"
   }

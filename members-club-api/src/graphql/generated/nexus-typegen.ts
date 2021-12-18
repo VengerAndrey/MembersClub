@@ -4,9 +4,24 @@
  */
 
 
-import type { Context } from "./src/context"
-
-
+import type { Context } from "./../context"
+import type { core } from "nexus"
+declare global {
+  interface NexusGenCustomInputMethods<TypeName extends string> {
+    /**
+     * DateTime scalar
+     */
+    dateTime<FieldName extends string>(fieldName: FieldName, opts?: core.CommonInputFieldConfig<TypeName, FieldName>): void // "DateTime";
+  }
+}
+declare global {
+  interface NexusGenCustomOutputMethods<TypeName extends string> {
+    /**
+     * DateTime scalar
+     */
+    dateTime<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void // "DateTime";
+  }
+}
 
 
 declare global {
@@ -25,12 +40,17 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
+  DateTime: any
 }
 
 export interface NexusGenObjects {
   Member: { // root type
+    email: string; // String!
     id: string; // String!
+    name: string; // String!
+    registrationDate: NexusGenScalars['DateTime']; // DateTime!
   }
+  Mutation: {};
   Query: {};
 }
 
@@ -46,23 +66,41 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
   Member: { // field return type
+    email: string; // String!
     id: string; // String!
+    name: string; // String!
+    registrationDate: NexusGenScalars['DateTime']; // DateTime!
+  }
+  Mutation: { // field return type
+    addMember: NexusGenRootTypes['Member'] | null; // Member
   }
   Query: { // field return type
-    ok: boolean; // Boolean!
+    members: NexusGenRootTypes['Member'][]; // [Member!]!
   }
 }
 
 export interface NexusGenFieldTypeNames {
   Member: { // field return type name
+    email: 'String'
     id: 'String'
+    name: 'String'
+    registrationDate: 'DateTime'
+  }
+  Mutation: { // field return type name
+    addMember: 'Member'
   }
   Query: { // field return type name
-    ok: 'Boolean'
+    members: 'Member'
   }
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    addMember: { // args
+      email?: string | null; // String
+      name?: string | null; // String
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {
