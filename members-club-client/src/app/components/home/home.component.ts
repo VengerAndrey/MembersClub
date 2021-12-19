@@ -12,13 +12,14 @@ export class HomeComponent implements OnInit {
   members: Member[] = []
 
   memberForm!: FormGroup
+  isSubmitted: boolean = false
 
   constructor(private memberService: MemberService, private formBuilder: FormBuilder) { }
 
   async ngOnInit(): Promise<void> {
     this.memberForm = this.formBuilder.group({
-      email: ['email@test.com'],
-      name: ['member']
+      email: ['', [Validators.required, Validators.email]],
+      name: ['', [Validators.required]]
     })
     await this.updateMembers()
   }
@@ -28,8 +29,14 @@ export class HomeComponent implements OnInit {
   }
 
   async addMember(form: FormGroup) {
+    this.isSubmitted = true
     if(form.valid) {
-      (await this.memberService.addMember(form.value.email, form.value.name)).subscribe(async () => await this.updateMembers(), (error) => alert(error))
+      (await this.memberService.addMember(form.value.email, form.value.name))
+        .subscribe(async () => await this.updateMembers(), (error) => alert(error))
     }
+  }
+
+  onReset() {
+    this.isSubmitted = false
   }
 }

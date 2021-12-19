@@ -1,25 +1,38 @@
 <div>
     <h1 class="text-center">Welcome to the club!</h1>
+    <h2>New member</h2>
     <form [formGroup]="memberForm" (ngSubmit)="addMember(memberForm)" class="form-table">
         <table>
             <tr>
                 <td><label>Name:</label></td>
                 <td colspan="3"><input formControlName="name"></td>
+                <td *ngIf="(memberForm.controls.name.touched || isSubmitted) && memberForm.controls.name.errors?.required">
+                    <label class="text-error">
+                        Name is required
+                    </label>
+                </td>
             </tr>
             <tr>
                 <td><label>Email:</label></td>
                 <td colspan="3"><input formControlName="email"></td>
+                <td *ngIf="(memberForm.controls.email.touched || isSubmitted) && memberForm.controls.email.errors?.required">
+                    <label class="text-error">
+                        Email is required
+                    </label>
+                </td>
+                <td *ngIf="(memberForm.controls.email.touched || isSubmitted) && memberForm.controls.email.errors?.email">
+                    <label class="text-error">
+                        Email has invalid format
+                    </label>
+                </td>
             </tr>
             <tr>
                 <td></td>
                 <td><button type="submit">Add</button></td>
                 <td></td>
-                <td><button type="reset" class="float-right">Clear</button></td>
+                <td><button type="reset" (click)="onReset()" class="float-right">Clear</button></td>
             </tr>
         </table>
-        <div>
-            
-        </div>
     </form>
     <h2 class="text-center">Members</h2>
     <table class="center data-table">
