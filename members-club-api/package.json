@@ -10,6 +10,7 @@
     "graphql": "^15.8.0",
     "neverthrow": "^4.3.1",
     "nexus": "^1.1.0",
+    "typescript-logging": "^1.0.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
