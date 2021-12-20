@@ -36,7 +36,7 @@ export const MemberMutation = extendType({
                 if (member.isOk()) {
                     return member.value
                 }
-                throw new Error(member.error)
+                throw new Error(JSON.stringify(member.error))
             }
         })
     }

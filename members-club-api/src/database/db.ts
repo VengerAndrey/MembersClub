@@ -6,27 +6,33 @@ const members: Member[] = []
 
 const getMembers = () => members
 
-const addMember = (email: string, name: string): Result<Member, DbError> => {
+const addMember = (email: string, name: string): Result<Member, DbError[]> => {
+    const errors: DbError[] = []
+
     email = email?.trim()
     name = name?.trim()
 
     if (!email) {
-        return err(DbError.EmptyEmail)
+        errors.push(DbError.EmptyEmail)
     }
     if (!name) {
-        return err(DbError.EmptyName)
+        errors.push(DbError.EmptyName)
     }
 
     const existingMember = members.find(m => m.email === email)
     if (existingMember) {
-        return err(DbError.EmailExists)
+        errors.push(DbError.EmailExists)
     }
 
     if (!validateEmail(email)) {
-        return err(DbError.InvalidEmail)
+        errors.push(DbError.InvalidEmail)
     }
     if (!validateName(name)) {
-        return err(DbError.InvalidName)
+        errors.push(DbError.InvalidName)
+    }
+
+    if (errors.length) {
+        return err(errors)
     }
 
     const member: Member = {

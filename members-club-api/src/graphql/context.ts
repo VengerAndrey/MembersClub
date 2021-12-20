@@ -4,7 +4,7 @@ import { Member } from '../database/Member';
 
 export interface Context {
     getMembers(): Member[],
-    addMember(email: string, name: string): Result<Member, DbError>,
+    addMember(email: string, name: string): Result<Member, DbError[]>,
 }
 
 export const createContext = (): Context => db
