@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
     const gqlErrors =  errors?.graphQLErrors
     if (gqlErrors && gqlErrors.length) {
       let message = ''
-      gqlErrors.forEach((e: any) => message += e?.message + '\n')
+      gqlErrors.forEach((e: any) => JSON.parse(e?.message ?? '[]').forEach((m: string) => message += m + '\n'))
       if (message) {
         alert('Some errors have occurred:\n' + message)
       }
