@@ -32,12 +32,11 @@ export class MemberService {
     })
   }
 
-  async getAll(): Promise<Member[]> {
-    const result = await this.membersQuery.refetch()
-    return result.data.members
+  getAll() {
+    return this.membersQuery.refetch()
   }
 
-  async addMember(email:string, name: string) {
+  addMember(email:string, name: string) {
     return this.apollo.mutate<Member>({
       mutation: this.addMemberMutation,
       variables: {

@@ -24,19 +24,39 @@ export class HomeComponent implements OnInit {
     await this.updateMembers()
   }
 
-  async updateMembers() {
-    this.members = await this.memberService.getAll()
+  async updateMembers(): Promise<void> {
+    try {
+      const response = await this.memberService.getAll()
+      this.members = response.data.members
+    } catch (e) {
+      this.handleErrors(e)
+    }
   }
 
   async addMember(form: FormGroup) {
     this.isSubmitted = true
     if(form.valid) {
       (await this.memberService.addMember(form.value.email, form.value.name))
-        .subscribe(async () => await this.updateMembers(), (error) => alert(error))
+        .subscribe(async () => await this.updateMembers(), this.handleErrors)
     }
   }
 
   onReset() {
     this.isSubmitted = false
+  }
+
+  private handleErrors(errors: any): void {
+    const networkError = errors?.networkError
+    if (networkError) {
+      alert('Remote service is not available.')
+    }
+    const gqlErrors =  errors?.graphQLErrors
+    if (gqlErrors && gqlErrors.length) {
+      let message = ''
+      gqlErrors.forEach((e: any) => message += e?.message + '\n')
+      if (message) {
+        alert('Some errors have occurred:\n' + message)
+      }
+    }
   }
 }
