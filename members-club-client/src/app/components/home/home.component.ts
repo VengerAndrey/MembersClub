@@ -1,43 +1,66 @@
-import { Component, OnInit } from '@angular/core';
-import { MemberService } from '../../services/member.service';
-import { Member } from '../../models/Member';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MembersGQL } from '../../graphql/MembersGQL';
+import { QueryRef } from 'apollo-angular';
+import { Subscription } from 'rxjs';
+import { AddMemberGQL } from '../../graphql/AddMemberGQL';
+import { Member } from '../../graphql/types/Member';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   members: Member[] = []
+  loading: boolean = false
 
   memberForm!: FormGroup
   isSubmitted: boolean = false
 
-  constructor(private memberService: MemberService, private formBuilder: FormBuilder) { }
+  private membersQuery: QueryRef<any>
+  private membersSubscription: Subscription = new Subscription;
 
-  async ngOnInit(): Promise<void> {
+  constructor(private formBuilder: FormBuilder, 
+    membersGQL: MembersGQL,
+    private addMemberGQL: AddMemberGQL) { 
+      this.membersQuery = membersGQL.watch()
+  }
+
+  ngOnInit() {
     this.memberForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       name: ['', [Validators.required]]
     })
-    await this.updateMembers()
+    this.membersSubscription = this.membersQuery.valueChanges.subscribe(
+      ({data}) => {
+        this.loading = false
+        this.members = data.members
+      },
+      (error) => this.handleErrors(error)
+    )
+    this.updateMembers()
   }
 
-  async updateMembers(): Promise<void> {
-    try {
-      const response = await this.memberService.getAll()
-      this.members = response.data.members
-    } catch (e) {
-      this.handleErrors(e)
-    }
+  ngOnDestroy(): void {
+    this.membersSubscription.unsubscribe()
   }
 
-  async addMember(form: FormGroup) {
+  updateMembers() {
+    this.loading = true
+    this.membersQuery.refetch()
+  }
+
+  addMember(form: FormGroup) {
     this.isSubmitted = true
     if(form.valid) {
-      (await this.memberService.addMember(form.value.email, form.value.name))
-        .subscribe(async () => await this.updateMembers(), this.handleErrors)
+      this.addMemberGQL.mutate({
+        email: form.value.email,
+        name: form.value.name
+      }).subscribe(
+        () => this.updateMembers(),
+        (error) => this.handleErrors(error)
+      )
     }
   }
 
