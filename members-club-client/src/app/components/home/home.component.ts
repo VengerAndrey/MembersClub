@@ -1,10 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MembersGQL } from '../../graphql/MembersGQL';
+import { MembersGQL, MembersResponse } from '../../graphql/MembersGQL';
 import { QueryRef } from 'apollo-angular';
 import { Subscription } from 'rxjs';
 import { AddMemberGQL } from '../../graphql/AddMemberGQL';
 import { Member } from '../../graphql/types/Member';
+import { NewMemberGQL } from '../../graphql/NewMemberGQL';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +24,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder, 
     membersGQL: MembersGQL,
-    private addMemberGQL: AddMemberGQL) { 
+    private addMemberGQL: AddMemberGQL,
+    private newMemberGQL: NewMemberGQL) { 
       this.membersQuery = membersGQL.watch()
   }
 
@@ -32,13 +34,29 @@ export class HomeComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       name: ['', [Validators.required]]
     })
+
+    const newMemberGQLDocument = this.newMemberGQL.document
+    this.membersQuery.subscribeToMore({
+      document: newMemberGQLDocument,
+      updateQuery: (previous: MembersResponse, { subscriptionData }) => {
+        console.log(previous)
+        console.log(subscriptionData)
+        this.members = [...previous.members, subscriptionData.data.newMember as Member]
+        return {
+          ...previous,
+          members: this.members
+        }
+      }
+    })
+
     this.membersSubscription = this.membersQuery.valueChanges.subscribe(
-      ({data}) => {
+      ({data} : {data: MembersResponse}) => {
         this.loading = false
         this.members = data.members
       },
       (error) => this.handleErrors(error)
     )
+
     this.updateMembers()
   }
 
