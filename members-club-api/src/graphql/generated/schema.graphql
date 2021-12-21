@@ -19,3 +19,7 @@ type Mutation {
 type Query {
   members: [Member!]!
 }
+
+type Subscription {
+  newMember: Member
+}

@@ -1,4 +1,7 @@
-import { extendType, nonNull, objectType, stringArg } from "nexus";
+import { extendType, objectType, stringArg } from 'nexus';
+import { PubSub } from 'graphql-subscriptions';
+
+const pubSub = new PubSub()
 
 export const Member = objectType({
     name: 'Member',
@@ -34,10 +37,22 @@ export const MemberMutation = extendType({
             resolve: (_root, args, ctx) => {
                 const member = ctx.addMember(args.email ?? '', args.name ?? '')
                 if (member.isOk()) {
+                    pubSub.publish('NEW_MEMBER', member.value)
                     return member.value
                 }
                 throw new Error(JSON.stringify(member.error))
             }
+        })
+    }
+})
+
+export const MemberSubscription = extendType({
+    type: 'Subscription',
+    definition(t) {
+        t.field('newMember', {
+            type: Member,
+            subscribe: () => pubSub.asyncIterator('NEW_MEMBER'),
+            resolve: (p: any) => p
         })
     }
 })

@@ -6,14 +6,19 @@
     "start": "ts-node --transpile-only src/graphql/schema && tsc && node ./dist"
   },
   "dependencies": {
-    "apollo-server": "^3.5.0",
+    "apollo-server-core": "^3.5.0",
+    "apollo-server-express": "^3.5.0",
+    "express": "^4.17.2",
     "graphql": "^15.8.0",
+    "graphql-subscriptions": "^2.0.0",
     "neverthrow": "^4.3.1",
     "nexus": "^1.1.0",
+    "subscriptions-transport-ws": "^0.11.0",
     "typescript-logging": "^1.0.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/express": "^4.17.13",
     "@types/node": "^17.0.0",
     "@types/uuid": "^8.3.3",
     "ts-node-dev": "^1.1.8",

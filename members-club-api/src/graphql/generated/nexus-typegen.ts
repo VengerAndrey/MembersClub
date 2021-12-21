@@ -52,6 +52,7 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Query: {};
+  Subscription: {};
 }
 
 export interface NexusGenInterfaces {
@@ -77,6 +78,9 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     members: NexusGenRootTypes['Member'][]; // [Member!]!
   }
+  Subscription: { // field return type
+    newMember: NexusGenRootTypes['Member'] | null; // Member
+  }
 }
 
 export interface NexusGenFieldTypeNames {
@@ -91,6 +95,9 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     members: 'Member'
+  }
+  Subscription: { // field return type name
+    newMember: 'Member'
   }
 }
 

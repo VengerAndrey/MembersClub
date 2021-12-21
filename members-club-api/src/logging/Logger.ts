@@ -1,4 +1,4 @@
-import { ApolloServerPlugin, GraphQLRequestContext, GraphQLRequestListener, GraphQLServiceContext } from "apollo-server-plugin-base";
+import { ApolloServerPlugin, GraphQLRequestContext, GraphQLRequestListener, GraphQLServiceContext } from 'apollo-server-plugin-base';
 import { query, mutation, unknown } from './config';
 
 const graphQLRequestListener: GraphQLRequestListener = {
