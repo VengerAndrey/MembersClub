@@ -1,0 +1,11 @@
+version: '2'
+services:
+  api:
+    build: members-club-api
+    ports:
+      - "4000:4000"
+  
+  client:
+    build: members-club-client
+    ports:
+      - "4200:80"
