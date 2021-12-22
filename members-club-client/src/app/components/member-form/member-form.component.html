@@ -1,5 +1,4 @@
 <div>
-    <h1 class="text-center">Welcome to the club!</h1>
     <h2>New member</h2>
     <form [formGroup]="memberForm" (ngSubmit)="addMember(memberForm)" class="form-table">
         <table>
@@ -34,24 +33,4 @@
             </tr>
         </table>
     </form>
-    <h2 class="text-center">Members</h2>
-    <table class="center data-table">
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Registration date</th>
-        </tr>
-        <tr *ngFor="let member of members, index as i">
-            <td>{{ i + 1 }}</td>
-            <td>{{ member.name }}</td>
-            <td>{{ member.email }}</td>
-            <td>{{ member.registrationDate | date: 'dd.MM.yyyy' }}</td>
-        </tr>
-        <ng-container *ngIf="members.length === 0">
-            <tr>
-                <td colspan="4" class="text-center">No members yet.</td>
-            </tr>
-        </ng-container>
-    </table>
 </div>

@@ -1,7 +1,3 @@
-.text-center {
-    text-align: center;
-}
-
 .center {
     margin-left: auto;
     margin-right: auto;
@@ -25,20 +21,4 @@
 
 .data-table td {
     font-size: 1.2em;
-}
-
-.form-table {
-    empty-cells: show;
-}
-
-.float-right {
-    float: right;
-}
-
-.form-table label, .form-table button, .form-table input {
-    font-size: 1.2em;
-}
-
-.text-error {
-    color: red;
 }
