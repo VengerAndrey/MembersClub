@@ -39,7 +39,7 @@ export const startApolloServer = async () => {
                 }
             }
         ],
-        introspection: true
+        introspection: false
     })
     await server.start()
     server.applyMiddleware({
